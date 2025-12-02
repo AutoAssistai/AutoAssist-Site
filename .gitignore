@@ -1,0 +1,61 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Frontend
+autoassist-frontend/node_modules/
+autoassist-frontend/.solid/
+autoassist-frontend/.output/
+autoassist-frontend/dist/
+autoassist-frontend/.vinxi/
+autoassist-frontend/playwright-report/
+autoassist-frontend/test-results/
+autoassist-frontend/.env
+autoassist-frontend/.env.local
+
+# Backend
+autoassist-api/target/
+autoassist-api/Cargo.lock
+autoassist-api/.env
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.production
+.env.development
+
+# Temporary files
+tmp_rovodev_*
+*.tmp
+*.temp
+
+# Build artifacts
+build/
+dist/
+out/
+
+# Dependencies
+node_modules/
+vendor/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

@@ -1,0 +1,45 @@
+════════════════════════════════════════════════════════════
+🎯 خطوات Railway Dashboard - بالضبط
+════════════════════════════════════════════════════════════
+
+1. افتح: https://railway.app/project/bd2109f7-6af8-4557-a71a-ef63055f3044
+
+2. اختر service: AutoAssist
+
+3. اذهب لـ: Settings
+
+4. في قسم "Deploy":
+   - ابحث عن "Dockerfile Path"
+   - امسح أي قيمة موجودة
+   - اكتب بالضبط: Dockerfile
+   - اضغط Save
+
+5. في قسم "Variables" تأكد من وجود:
+   DATABASE_URL = postgresql://postgres:bpGdnlJNciDiREFjpuMAafmHCQuWnryg@postgres.railway.internal:5432/railway
+   SMTP_HOST = smtp.mail.yahoo.com
+   SMTP_PORT = 465
+   SMTP_USERNAME = autoassist.contact@yahoo.com
+   SMTP_PASSWORD = gjrmemjpcqwqiqft
+   SMTP_FROM = autoassist.contact@yahoo.com
+   ADMIN_EMAIL = autoassist.contact@yahoo.com
+   HOST = 0.0.0.0
+   PORT = 8080
+   RUST_LOG = info,sqlx=warn
+
+6. ارجع للصفحة الرئيسية للـ service
+
+7. اضغط زر "Deploy" أو في Deployments → "Redeploy"
+
+8. راقب logs
+
+════════════════════════════════════════════════════════════
+✅ Dockerfile المحلي صحيح ويحتوي:
+════════════════════════════════════════════════════════════
+
+COPY autoassist-api/Cargo.toml autoassist-api/Cargo.lock ./
+COPY autoassist-api/src ./src
+COPY autoassist-api/migrations ./migrations
+
+════════════════════════════════════════════════════════════
+⏱️ الوقت المتوقع: 5-10 دقائق للبناء
+════════════════════════════════════════════════════════════

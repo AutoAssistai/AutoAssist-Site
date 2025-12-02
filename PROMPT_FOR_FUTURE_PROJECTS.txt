@@ -1,0 +1,104 @@
+═══════════════════════════════════════════════════════════════════════════
+🦀 UNIVERSAL PROMPT: Rust + SQLx + Railway PostgreSQL Integration
+═══════════════════════════════════════════════════════════════════════════
+
+Use this prompt for any Rust project that needs Railway PostgreSQL integration:
+
+───────────────────────────────────────────────────────────────────────────
+PROMPT START
+───────────────────────────────────────────────────────────────────────────
+
+أريد منك تكامل مشروع Rust مع قاعدة بيانات Railway PostgreSQL.
+
+# معلومات المشروع:
+- Backend: Rust + [Axum/Actix/Rocket]
+- Database: SQLx + PostgreSQL
+- Host: Railway PostgreSQL
+
+# بيانات Railway:
+PGUSER=postgres
+PGPASSWORD=[YOUR_PASSWORD]
+PGDATABASE=railway
+PGHOST_INTERNAL=postgres.railway.internal
+PGPORT_INTERNAL=5432
+PGHOST_EXTERNAL=[YOUR_PROXY].proxy.rlwy.net
+PGPORT_EXTERNAL=[YOUR_PORT]
+
+DATABASE_URL_INTERNAL=postgresql://postgres:[PASSWORD]@postgres.railway.internal:5432/railway
+DATABASE_URL_EXTERNAL=postgresql://postgres:[PASSWORD]@[PROXY].proxy.rlwy.net:[PORT]/railway
+
+# المطلوب:
+
+1. إنشاء/تحديث ملفات .env:
+   - .env (للاستخدام النشط)
+   - .env.local (تطوير محلي - TCP proxy)
+   - .env.railway (إنتاج - internal network)
+   - .env.example (قالب)
+
+2. التأكد من تحميل المتغيرات في src/main.rs أو src/config.rs باستخدام dotenvy
+
+3. تكوين SQLx connection pool محسّن لـ Railway:
+   - max_connections: 20
+   - min_connections: 2
+   - acquire_timeout: 30s
+   - idle_timeout: 10 min
+   - max_lifetime: 30 min
+   - test_before_acquire: true
+
+4. إعداد migrations تلقائية باستخدام sqlx::migrate!()
+
+5. إضافة error handling و logging للاتصالات
+
+6. إنشاء setup script (setup-railway.sh) يقوم بـ:
+   - اختيار البيئة (محلي/إنتاج)
+   - نسخ ملف .env المناسب
+   - اختبار الاتصال
+   - تشغيل migrations
+
+7. إنشاء test script (test-railway-connection.sh) يختبر:
+   - توفر PostgreSQL client
+   - الاتصال الخارجي (TCP proxy)
+   - وجود الجداول
+   - صلاحيات الكتابة
+
+8. تحديث Dockerfile بـ:
+   - SSL/TLS certificates (ca-certificates, openssl)
+   - Health check endpoint
+   - Runtime dependencies
+
+9. إنشاء ملفات Railway:
+   - railway.toml
+   - railway.json
+
+10. توثيق شامل بالعربية والإنجليزية
+
+# التسليمات:
+- جميع ملفات .env جاهزة للنسخ/اللصق
+- كود اتصال محسّن
+- سكربتات الإعداد والاختبار
+- تكوين Railway
+- توثيق كامل
+
+───────────────────────────────────────────────────────────────────────────
+PROMPT END
+───────────────────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════════════════
+📋 QUICK CHECKLIST
+═══════════════════════════════════════════════════════════════════════════
+
+Before using this prompt, gather:
+[ ] Railway PostgreSQL password
+[ ] Railway proxy domain and port
+[ ] Project name
+[ ] Web framework used (Axum/Actix/Rocket)
+[ ] Current Cargo.toml dependencies
+
+After getting the response:
+[ ] Copy .env.local to .env for local dev
+[ ] Run ./setup-railway.sh
+[ ] Test with ./test-railway-connection.sh
+[ ] Run cargo run to test locally
+[ ] Deploy with railway up
+
+═══════════════════════════════════════════════════════════════════════════
