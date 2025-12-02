@@ -3,7 +3,7 @@ FROM rust:1.91 as builder
 
 WORKDIR /app
 
-# Copy manifests
+# Copy manifests from autoassist-api subdirectory
 COPY autoassist-api/Cargo.toml autoassist-api/Cargo.lock ./
 
 # Create migrations directory (empty for caching)
@@ -15,7 +15,7 @@ RUN mkdir src && \
     cargo build --release && \
     rm -rf src
 
-# Copy actual source code and migrations
+# Copy actual source code and migrations from autoassist-api subdirectory
 COPY autoassist-api/src ./src
 COPY autoassist-api/migrations ./migrations
 
