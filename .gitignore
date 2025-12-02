@@ -22,7 +22,6 @@ autoassist-frontend/.env.local
 
 # Backend
 autoassist-api/target/
-autoassist-api/Cargo.lock
 autoassist-api/.env
 
 # Logs
