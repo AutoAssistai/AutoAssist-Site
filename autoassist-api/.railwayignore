@@ -1,0 +1,16 @@
+# Ignore target directory (Rust build artifacts)
+target/
+
+# Ignore local env files
+.env.local
+.env.*.local
+
+# Ignore IDE files
+.idea/
+.vscode/
+
+# Ignore logs
+*.log
+
+# Ignore test files
+test-*.sh

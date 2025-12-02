@@ -1,0 +1,54 @@
+# Build stage
+FROM rust:1.91 as builder
+
+WORKDIR /app
+
+# Copy manifests
+COPY autoassist-api/Cargo.toml autoassist-api/Cargo.lock ./
+
+# Create migrations directory (empty for caching)
+RUN mkdir -p migrations
+
+# Cache dependencies
+RUN mkdir src && \
+    echo "fn main() {}" > src/main.rs && \
+    cargo build --release && \
+    rm -rf src
+
+# Copy actual source code and migrations
+COPY autoassist-api/src ./src
+COPY autoassist-api/migrations ./migrations
+
+# Build application
+RUN touch src/main.rs && \
+    cargo build --release
+
+# Runtime stage
+FROM debian:bookworm-slim
+
+# Install runtime dependencies including CA certificates for SSL/TLS
+RUN apt-get update && \
+    apt-get install -y ca-certificates libssl3 openssl && \
+    update-ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy binary from builder
+COPY --from=builder /app/target/release/autoassist-api ./
+COPY --from=builder /app/migrations ./migrations
+
+# Create non-root user
+RUN useradd -m -u 1001 appuser && \
+    chown -R appuser:appuser /app
+
+USER appuser
+
+# Railway and Fly.io use PORT env variable, defaults to 8080
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+CMD ["./autoassist-api"]
